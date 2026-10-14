@@ -1,0 +1,48 @@
+# ==========================================
+# Godot Engine Exclusions
+# ==========================================
+# Godot 4+ cache, import, and build data
+.godot/
+
+# Godot 3 specific cache directories (safe to leave for backward compatibility)
+.import/
+.mono/
+data_*/
+
+# Imported binary lock files
+*.uid
+
+# Textures and translation exports (if automatically generated)
+*.translation
+
+# =======================================================================
+# JetBrains Rider & IDE Specific
+# =======================================================================
+.idea/
+.VSConfig
+*.sln
+*.csproj
+*.sln.DotSettings
+*.sln.DotSettings.user
+RiderLink/
+# Common .NET / Roslyn build outputs and caches
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# Crash Logs & Exported Builds
+# ==========================================
+# Godot crash logs
+*.log
+
+# Exported binaries (uncomment if you export inside your project folder)
+# export/
+# build/
+# *.dll
+# *.so
+# *.dylib
+# *.exe

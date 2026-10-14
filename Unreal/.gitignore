@@ -1,0 +1,69 @@
+# =======================================================================
+# JetBrains Rider & IDE Specific
+# =======================================================================
+.idea/
+.VSConfig
+*.sln
+*.csproj
+*.sln.DotSettings
+*.sln.DotSettings.user
+RiderLink/
+
+# If you install RiderLink directly into your project's plugins folder
+Plugins/Developer/RiderLink/
+
+# =======================================================================
+# Unreal Engine Folders & Temporary Files
+# =======================================================================
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Ignore plugin specific binaries/intermediates
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+
+# =======================================================================
+# Generated Projects & User Workspace files
+# =======================================================================
+.vs/
+*.xcodeproj
+*.xcworkspace
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+
+# =======================================================================
+# Compiled Source and Build Artifacts
+# =======================================================================
+# Compiled Objects
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Shared Libraries & Executables
+*.so
+*.dylib
+*.dll
+*.lib
+*.lai
+*.la
+*.a
+*.exe
+*.out
+*.app
+*.ipa
+
+# =======================================================================
+# Asset cache & Built Data
+# =======================================================================
+*_BuiltData.uasset

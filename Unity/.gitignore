@@ -37,6 +37,17 @@
 # Visual Studio cache directory
 .vs/
 
+# =======================================================================
+# JetBrains Rider & IDE Specific
+# =======================================================================
+.idea/
+.VSConfig
+*.sln
+*.csproj
+*.sln.DotSettings
+*.sln.DotSettings.user
+RiderLink/
+
 # Gradle cache directory
 .gradle/
 
