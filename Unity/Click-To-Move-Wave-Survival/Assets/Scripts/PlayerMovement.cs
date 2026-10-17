@@ -12,20 +12,23 @@ public class PlayerMovement : MonoBehaviour
     InputAction _interactClick;
 
     private Camera _mainCamera;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _mainCamera = Camera.main;
         _agent = GetComponent<NavMeshAgent>();
         _moveClick = InputSystem.actions.FindAction("Move");
         _interactClick = InputSystem.actions.FindAction("Interact");
+        _agent.speed = playerStats.GetPlayerMovementSpeed(gameObject);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_moveClick.IsPressed())
         {
+            //Future plans:
+            /*Check if raycast hits enemy units, if so target enemy unit as destination and focus targeting on said unit
+             * Only run this if statement while player character is selected as left-clicked focused unit
+             */
             Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
             if (Physics.Raycast(_mainCamera.ScreenPointToRay(mouseScreenPos), out var hit, 100))
             {
