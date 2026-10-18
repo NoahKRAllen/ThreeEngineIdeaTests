@@ -19,4 +19,15 @@ public class UnitMovement : MonoBehaviour
     {
         _agent.SetDestination(_target.position);
     }
+    
+    
+    
+    private void OnDrawGizmosSelected()
+    {
+        if (!unitStats) return;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, unitStats.GetUnitAggroRange(gameObject));
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, unitStats.GetUnitAttackRange(gameObject));
+    }
 }

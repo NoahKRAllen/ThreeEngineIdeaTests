@@ -36,4 +36,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    
+    private void OnDrawGizmosSelected()
+    {
+        if (!playerStats) return;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, playerStats.GetPlayerAgroRange(gameObject));
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, playerStats.GetPlayerAttackRange(gameObject));
+    }
 }

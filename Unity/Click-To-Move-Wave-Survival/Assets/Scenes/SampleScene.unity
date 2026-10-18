@@ -563,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734cde966cc9a8047a84075bb246c0a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  playerMovementSpeed: 10
+  playerMovementSpeed: 5
   playerAttackRate: 0
   playerAttackRange: 0
   playerAgroRange: 0
@@ -796,11 +796,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   unitName: 
   unitHealth: 0
-  unitAttackRange: 0
+  unitAttackRange: 10
   unitAttackSpeed: 0
   unitDefense: 0
-  unitAggroRange: 0
-  unitMovementSpeed: 10
+  unitAggroRange: 20
+  unitMovementSpeed: 5
 --- !u!1 &879293868
 GameObject:
   m_ObjectHideFlags: 0
