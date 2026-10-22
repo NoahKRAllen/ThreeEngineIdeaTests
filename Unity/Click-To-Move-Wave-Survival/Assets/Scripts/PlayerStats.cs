@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-
+//Stopping use of PlayerStats currently, will come back to this and make it a child class of UnitStats if there are any extra
+//stats that the player must have that not all units share
     [SerializeField] float playerMovementSpeed;
     public float GetPlayerMovementSpeed(GameObject requester)
     {

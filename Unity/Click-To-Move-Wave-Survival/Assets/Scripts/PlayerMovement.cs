@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]PlayerStats playerStats;
+    [SerializeField]UnitStats playerStats;
 
     private NavMeshAgent _agent;
 
@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _moveClick = InputSystem.actions.FindAction("Move");
         _interactClick = InputSystem.actions.FindAction("Interact");
-        _agent.speed = playerStats.GetPlayerMovementSpeed(gameObject);
+        _agent.speed = playerStats.GetUnitMovementSpeed(gameObject);
     }
 
     void Update()
@@ -41,8 +41,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!playerStats) return;
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, playerStats.GetPlayerAgroRange(gameObject));
+        Gizmos.DrawWireSphere(transform.position, playerStats.GetUnitAggroRange(gameObject));
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, playerStats.GetPlayerAttackRange(gameObject));
+        Gizmos.DrawWireSphere(transform.position, playerStats.GetUnitAttackRange(gameObject));
     }
 }
