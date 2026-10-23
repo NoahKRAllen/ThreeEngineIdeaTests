@@ -88,7 +88,6 @@ namespace PlayerControls
         }
     
         [SerializeField] private PlayerMovementController playerMovementController;
-
         public PlayerMovementController GetPlayerMovementController(GameObject requester)
         {
             if (requester != null)
@@ -98,7 +97,9 @@ namespace PlayerControls
 
             return null;
         }
+        
         [SerializeField] private PlayerAttackController playerAttackController;
 
+        
     }
 }

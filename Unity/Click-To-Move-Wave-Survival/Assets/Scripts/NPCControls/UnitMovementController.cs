@@ -18,6 +18,9 @@ namespace NPCControls
 
         void Update()
         {
+            //Setup checks for reaching attack range, if range is reached then stop movement and start attacking
+            //Can use enum like in ShapedLanes { Moving, Attacking }
+            //Once in range, call over to UnitAttackController and set the attack bool to true to begin attacking
             _agent.SetDestination(_target.position);
         }
         public void SetTarget(Transform closest)

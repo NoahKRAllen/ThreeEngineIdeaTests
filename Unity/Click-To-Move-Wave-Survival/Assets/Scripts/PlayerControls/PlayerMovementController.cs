@@ -28,14 +28,16 @@ namespace PlayerControls
         {
             if (_moveClick.IsPressed())
             {
-                //Future plans:
-                /*Check if raycast hits enemy units, if so target enemy unit as destination and focus targeting on said unit
-             * Only run this if statement while player character is selected as left-clicked focused unit
-             */
+                //Set bool to turn off player auto-targeting in PlayerTargetingController for the duration that the player is manually targeting a unit and/or manually moving the character.
                 Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
                 if (Physics.Raycast(_mainCamera.ScreenPointToRay(mouseScreenPos), out var hit, 100))
                 {
+                    //Check here on hit to see if we clicked on an enemy unit, if so SetDestination to enemy unit instead of hit.point
+                    //if clicking on enemy unit, setup bool for active targeting, so that once we are within attack range, player stops instead of running up to the target like normal movement
+                    
+                    
                     _agent.SetDestination(hit.point);
+                    //Once destination is within certain distance, .2f or something, set moving bool back off and stop player movement
                 }
             }
         }

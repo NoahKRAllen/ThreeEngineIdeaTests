@@ -26,6 +26,11 @@ namespace PlayerControls
         // Update is called once per frame
         void Update()
         {
+            //This will probably get a boolean set for not being active while player is directly controlling movement/targeting
+            //This boolean will need to be turned on for movement/manual targeting and then turned back off for the following:
+            //Movement destination reached
+            //Enemy Target killed
+            //Player Stop command input
             _scanTimer -= Time.deltaTime;
             if (_scanTimer <= 0f)
             {
