@@ -503,7 +503,6 @@ GameObject:
   - component: {fileID: 724308566}
   - component: {fileID: 724308565}
   - component: {fileID: 724308569}
-  - component: {fileID: 724308570}
   m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -542,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81796d80f6b3c4846b6270e21b635e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  playerStats: {fileID: 724308570}
+  playerStats: {fileID: 724308569}
 --- !u!114 &724308566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -555,7 +554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 813edb19c48d5fd4c8f095398604f608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  playerStats: {fileID: 724308570}
+  playerStats: {fileID: 724308569}
 --- !u!195 &724308567
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -610,33 +609,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 724308562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0639896045ca6304091d582dab80ab86, type: 3}
+  m_Script: {fileID: 11500000, guid: 734cde966cc9a8047a84075bb246c0a6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TargetingController
-  targetScanInterval: 0
-  target: {fileID: 0}
-  enemyLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
---- !u!114 &724308570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 724308562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6691566cb5fbfaa4d967ac6dbb3116d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnitStats
-  unitName: Player
-  unitHealth: 0
-  unitAttackRange: 10
-  unitAttackSpeed: 0
-  unitDefense: 0
-  unitAggroRange: 20
-  unitMovementSpeed: 5
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControls.PlayerStats
+  playerMovementSpeed: 0
+  playerAttackRate: 0
+  playerAttackRange: 0
+  playerAggroRange: 0
+  playerDamage: 0
+  playerHealth: 0
+  playerMovementController: {fileID: 0}
+  playerAttackController: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,6 +782,9 @@ MonoBehaviour:
   unitDefense: 0
   unitAggroRange: 20
   unitMovementSpeed: 5
+  isMobile: 0
+  unitMovementController: {fileID: 0}
+  unitTargetingController: {fileID: 0}
 --- !u!114 &851509935
 MonoBehaviour:
   m_ObjectHideFlags: 0
