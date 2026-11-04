@@ -67,3 +67,12 @@ Breakdown:
 --Later version:
 ---Waves limited, win only comes at end of all spawned Units
 ---Much later different 'missions' that have different paths of victory
+
+
+
+Unity Progress:
+-Camera Follow, using basic smooth follow script
+-Player Movement, right click to move around on a navmesh
+-Enemy Movement, chasing player using same navmesh
+-Enemy targeting
+-Player targeting
