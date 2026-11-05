@@ -76,3 +76,10 @@ Unity Progress:
 -Enemy Movement, chasing player using same navmesh
 -Enemy targeting
 -Player targeting
+
+Unity Plan:
+-Enemy Stats
+-Player Stats
+-Enemy Attack once in range
+-Player auto-attack once in range
+-Player overwrite target with right click on enemy unit
