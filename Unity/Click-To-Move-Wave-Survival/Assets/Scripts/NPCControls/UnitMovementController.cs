@@ -25,6 +25,8 @@ namespace NPCControls
         }
         public void SetTarget(Transform closest)
         {
+            //For the current build, as of 11/10/26, this function isn't in use. However, once there is more than a
+            //single player or more than a single player-based unit, this will come in handy.
             _target = closest;
         }
         

@@ -17,6 +17,7 @@ namespace PlayerControls
     
         private PlayerStats _playerStats;
 
+        [SerializeField] private GameObject playerLowerBody;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -46,6 +47,7 @@ namespace PlayerControls
             //This may be changed now, with a buffer distance to stop swapping
             //So if Player1 is 10 away and Player2 is 10.1 away, we would stay focused on Player1 until Player2 was ~8 away
             //This should keep the 'flicker' down, and the buffer limit can be adjusted as needed.
+            //Checking for target also will handle swapping targets when one had died, removing the need for that in CombatController
             if (target && Vector3.Distance(transform.position, target.position) <= _playerStats.GetPlayerAggroRange(gameObject))
                 return;
 
@@ -80,6 +82,7 @@ namespace PlayerControls
                 //Could just set the player character to track/face targets within aggro range
                 //This will of course need editing if/when I implement fog-of-war
                 //_playerStats.GetPlayerMovementController(gameObject).SetTarget(target);
+                playerLowerBody.transform.LookAt(target);
                 return;
             //}
             

@@ -44,6 +44,10 @@ namespace NPCControls
             if (target && Vector3.Distance(transform.position, target.position) <= _unitStats.GetUnitAggroRange(gameObject))
                 return;
 
+            //This was technically made as the result of needing to target a singular close target among many other potential targets.
+            //This isn't useful for the Unit script currently with only the one player character being the potential target, as well as
+            //currently the units are all just set to move towards the player at all times.
+            //Will be leaving this here for use at a later time, as it will only cause a single loop which handles the targeting that we need anyways.
             int count = Physics.OverlapSphereNonAlloc(transform.position, _unitStats.GetUnitAggroRange(gameObject), ScanBuffer, enemyLayerMask);
 
             Transform closest = null;
@@ -70,6 +74,8 @@ namespace NPCControls
                     //Only will need to change this if we want non-hostile NPCs or maybe NPCs staying in a certain zone
                     return;
                 }
+                //Currently un-necessary as all enemy units will already have their target set to the player character
+                //Leaving in for use at a later time
                 _unitStats.GetUnitMovementController(gameObject).SetTarget(target);
                 return;
             }

@@ -1,66 +1,65 @@
+using Interfaces;
 using UnityEngine;
 
 namespace PlayerControls
 {
-    public class PlayerStats : MonoBehaviour
+    public class PlayerStats : MonoBehaviour, IDamagable
     {
+        public float CurrentHealth => playerHealth;
+
+        public void TakeDamage(GameObject requester, float value)
+        {
+            if (requester != null)
+            {
+                playerHealth = Mathf.Max(0, playerHealth - value);
+            }
+        }
         [SerializeField] float playerMovementSpeed;
-        public float GetPlayerMovementSpeed(GameObject requester)
-        {
-            if (requester != null)
-            {
-                return playerMovementSpeed;
-            }
 
-            return 0;
-        }
-    
-        [Tooltip("Attacks per second (1 = 1APS, 1.5 = 1.5APS")]
-        [SerializeField] float playerAttackRate;
-        public float GetPlayerAttackRate(GameObject requester)
-        {
-            if (requester != null)
-            {
-                return playerAttackRate;
-            }
-            return 0;
-        }
-    
+        [Tooltip("Attacks per second (1 = 1APS, 1.5 = 1.5APS")] [SerializeField]
+        float playerAttackRate;
+
         [SerializeField] float playerAttackRange;
-        public float GetPlayerAttackRange(GameObject requester)
-        {
-            //This is to stop any external script from accessing values
-            //This will need to be changed to actually check if the requester has the required tag/active script to make these calls
-            //All to stop cheaters, at least until we go fully serverside controls
-            if (requester != null)
-            {
-                return playerAttackRange;
-            }
 
-            return 0;
-        }
-    
         [SerializeField] float playerAggroRange;
-        public float GetPlayerAggroRange(GameObject requester)
-        {
-            if (requester != null)
-            {
-                return playerAggroRange;
-            }
 
-            return 0;
-        }
-    
         [SerializeField] float playerDamage;
-        public float GetPlayerDamage(GameObject requester)
+
+
+        [SerializeField] float playerHealth;
+
+
+        [SerializeField] private PlayerMovementController playerMovementController;
+
+        [SerializeField] private PlayerAttackController playerAttackController;
+
+
+        private bool ValidateRequest(GameObject requester)
         {
-            if (requester != null)
+            //This will be used to handle the multiplayer logic in the future to ensure whatever is accessing code has permission to do so
+            if (requester)
             {
-                return playerDamage;
+                return true;
             }
 
-            return 0;
+            return false;
         }
+
+        public float GetPlayerMovementSpeed(GameObject requester) =>
+            ValidateRequest(requester) ? playerMovementSpeed : 0f;
+
+        public float GetPlayerAttackRate(GameObject requester) =>
+            ValidateRequest(requester) ? playerAttackRate : 0f;
+
+        public float GetPlayerAttackRange(GameObject requester) =>
+            ValidateRequest(requester) ? playerAttackRange : 0f;
+
+        public float GetPlayerAggroRange(GameObject requester) =>
+            ValidateRequest(requester) ? playerAggroRange : 0f;
+
+        public float GetPlayerDamage(GameObject requester) =>
+            ValidateRequest(requester) ? playerDamage : 0f;
+
         public void SetPlayerDamage(GameObject requester, float value)
         {
             if (requester != null)
@@ -68,38 +67,23 @@ namespace PlayerControls
                 playerDamage = value;
             }
         }
-    
-        [SerializeField] float playerHealth;
-        public float GetPlayerHealth(GameObject requester)
-        {
-            if (requester != null)
-            {
-                return playerHealth;
-            }
 
-            return 0;
-        }
-        public void SetPlayerHealth(GameObject requester, int value)
-        {
-            if (requester != null)
-            {
-                playerHealth = value;
-            }
-        }
-    
-        [SerializeField] private PlayerMovementController playerMovementController;
-        public PlayerMovementController GetPlayerMovementController(GameObject requester)
-        {
-            if (requester != null)
-            {
-                return playerMovementController;
-            }
+        public PlayerMovementController GetPlayerMovementController(GameObject requester) =>
+            ValidateRequest(requester) ? playerMovementController : null;
 
-            return null;
-        }
+        public float GetPlayerHealth(GameObject requester) =>
+            ValidateRequest(requester) ? playerHealth : 0f;
         
-        [SerializeField] private PlayerAttackController playerAttackController;
 
-        
+        private void IncreasePlayerHealth(GameObject requester, int value)
+        {
+            if (requester != null)
+            {
+                playerHealth += value;
+            }
+        }
+
+        public PlayerAttackController GetPlayerAttackController(GameObject requester) =>
+            ValidateRequest(requester) ? playerAttackController : null;
     }
 }
