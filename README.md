@@ -79,7 +79,21 @@ Unity Progress:
 
 Unity Plan:
 -Enemy Stats
+--Enemy Attack
+--Enemy Attack range
+--Enemy Attack speed
+--Enemy health
 -Player Stats
+--Player attack
+--Player Attack range
+--Player Attack speed
+--Player Health
 -Enemy Attack once in range
+--Enemy moves towards player until within range, then starts attacking
+--Want enemy to not push other enemies aside, instead swarm around at their attack range
+---This may be a later thing, for now if the enemies get pushed around by other enemies we will leave it be
 -Player auto-attack once in range
+--Player targeting script setup with the InSphere physics check used in previous project
+--Player attacking and killing enemies, which then updates the current target to the next closest enemy
 -Player overwrite target with right click on enemy unit
+--This may be a later thing, for now we will only have auto-attacking
