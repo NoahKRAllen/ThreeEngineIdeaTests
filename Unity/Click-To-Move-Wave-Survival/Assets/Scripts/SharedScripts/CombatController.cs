@@ -18,7 +18,7 @@ namespace SharedScripts
         private PlayerStats _playerStats;
         private float _nextAttackTime;
 
-        [SerializeField] private CombatController _target;
+        [SerializeField] private CombatController target;
 
         private enum UnitType { Player, Npc, NotSetup }
 
@@ -36,6 +36,7 @@ namespace SharedScripts
             else if (TryGetComponent(out _playerStats))
             {
                 _unitType = UnitType.Player;
+                _unitStats = null;
             }
             else
             {
@@ -50,8 +51,10 @@ namespace SharedScripts
             switch (_unitType)
             {
                 case UnitType.Player:
+                    PlayerUpdate();
                     break;
                 case UnitType.Npc:
+                    NpcUpdate();
                     break;
                 case UnitType.NotSetup:
                     break;
@@ -60,6 +63,42 @@ namespace SharedScripts
                     gameObject.SetActive(false);
                     break;
             }
+        }
+
+        private void PlayerUpdate()
+        {
+            if (_playerStats.GetPlayerHealth(gameObject) <= 0)
+            {
+                Die(gameObject);
+            }
+
+            if (_nextAttackTime > 0.0f)
+            {
+                _nextAttackTime -= Time.deltaTime;
+            }
+
+            if (!(_nextAttackTime <= 0.0f) || !_withinRange) return;
+            _nextAttackTime = 1f / _playerStats.GetPlayerAttackRate(gameObject);
+            if (!target) return;
+            target.TakeDamage(gameObject, _playerStats.GetPlayerDamage(gameObject));
+        }
+
+        private void NpcUpdate()
+        {
+            if (_unitStats.GetUnitHealth(gameObject) <= 0)
+            {
+                Die(gameObject);
+            }
+
+            if (_nextAttackTime > 0.0f)
+            {
+                _nextAttackTime -= Time.deltaTime;
+            }
+
+            if (!(_nextAttackTime <= 0.0f) || !_withinRange) return;
+            _nextAttackTime = 1f / _unitStats.GetUnitAttackSpeed(gameObject);
+            if (!target) return;
+            target.TakeDamage(gameObject, _unitStats.GetUnitDamage(gameObject));
         }
 
         private void TakeDamage(GameObject requester, int incomingDamage)
@@ -71,14 +110,14 @@ namespace SharedScripts
             switch (_unitType)
             {
                 case UnitType.Player:
-                    _playerStats.TakeDamage(gameObject, incomingDamage);
+                    _playerStats.ReducePlayerHealth(gameObject, incomingDamage);
                     break;
                 case UnitType.Npc:
                     _unitStats.ReduceUnitHealth(gameObject, incomingDamage);
                     break;
             }
         }
-
+        
         private void Die(GameObject requester)
         {
             if (requester == null)
@@ -92,6 +131,38 @@ namespace SharedScripts
             }
             _isDead = true;
             Destroy(gameObject);
+        }
+        
+        public void StartAttack(GameObject requester, Transform newTarget)
+        {
+            if (requester == null)
+            {
+                return;
+            }
+            if (!newTarget)
+            {
+                print($"{gameObject.name} tried to start attack on null target");
+                return;
+            }
+
+            if (!Registry.TryGetValue(newTarget, out var targetController))
+            {
+                print($"No CombatController registered for {newTarget.name}");
+                return;
+            }
+
+            _withinRange = true;
+            target = targetController;
+        }
+        
+        public void StopAttack(GameObject requester)
+        {
+            if (requester == null)
+            {
+                return;
+            }
+            _withinRange = false;
+            target = null;
         }
     }
 }
