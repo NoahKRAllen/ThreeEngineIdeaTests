@@ -7,9 +7,6 @@ namespace PlayerControls
         private float _scanTimer;
         [Tooltip("How often (seconds) to re-scan for targets. Lower = more responsive, more expensive.")]
         [SerializeField] float targetScanInterval;
-    
-        [SerializeField] private Transform target;
-    
         [Tooltip("Only colliders on these layers count as valid targets.")]
         [SerializeField] private LayerMask enemyLayerMask;
     
@@ -17,11 +14,13 @@ namespace PlayerControls
     
         private PlayerStats _playerStats;
 
-        [SerializeField] private GameObject playerLowerBody;
+        [SerializeField] private GameObject playerUpperBody;
+        [SerializeField] private float lookSpeed;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             _playerStats = GetComponent<PlayerStats>();
+            _scanTimer = targetScanInterval;
         }
 
         // Update is called once per frame
@@ -33,12 +32,26 @@ namespace PlayerControls
             //Enemy Target killed
             //Player Stop command input
             _scanTimer -= Time.deltaTime;
-            if (_scanTimer <= 0f)
+            //AutoTargeting will be stopped during player active targeting, set by player right-clicking on an enemy unit
+            if (_playerStats.GetActiveTargeting(gameObject))
             {
-                _scanTimer = targetScanInterval;
-                ScanForTarget();
+                return;
             }
+            if (!(_scanTimer <= 0f)) return;
+            _scanTimer = targetScanInterval;
+            ScanForTarget();
         }
+
+        void LateUpdate()
+        {
+            if (!_playerStats.GetPlayerTarget(gameObject)) return;
+            var lookPos = _playerStats.GetPlayerTarget(gameObject).position - playerUpperBody.transform.position;
+            if (lookPos.sqrMagnitude <= 0.001f) return;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            playerUpperBody.transform.rotation = Quaternion.RotateTowards(playerUpperBody.transform.rotation, rotation, Time.deltaTime * lookSpeed);
+        }
+        
     
         private void ScanForTarget()
         {
@@ -48,8 +61,9 @@ namespace PlayerControls
             //So if Player1 is 10 away and Player2 is 10.1 away, we would stay focused on Player1 until Player2 was ~8 away
             //This should keep the 'flicker' down, and the buffer limit can be adjusted as needed.
             //Checking for target also will handle swapping targets when one had died, removing the need for that in CombatController
-            if (target && Vector3.Distance(transform.position, target.position) <= _playerStats.GetPlayerAggroRange(gameObject))
+            if (_playerStats.GetPlayerTarget(gameObject) && Vector3.Distance(transform.position, _playerStats.GetPlayerTarget(gameObject).position) <= _playerStats.GetPlayerAggroRange(gameObject))
                 return;
+            
 
             int count = Physics.OverlapSphereNonAlloc(transform.position, _playerStats.GetPlayerAggroRange(gameObject), ScanBuffer, enemyLayerMask);
 
@@ -67,26 +81,7 @@ namespace PlayerControls
                 }
             }
 
-            target = closest;
-            //Currently non-mobile players aren't a thing, but they could be in the future. Like siege mode or something
-            //if (_playerStats.GetIsMobile(gameObject))
-            //{
-                if (!target)
-                {
-                    //Player character shouldn't do anything without a target
-                    return;
-                }
-                //This will need to be a check function not a straight SetTarget
-                //We may not even do this to the PlayerMovementController, as the player should only be auto-targeting
-                //not auto-moving
-                //Could just set the player character to track/face targets within aggro range
-                //This will of course need editing if/when I implement fog-of-war
-                //_playerStats.GetPlayerMovementController(gameObject).SetTarget(target);
-                playerLowerBody.transform.LookAt(target);
-                return;
-            //}
-            
-            //Currently leaving non-mobile NPC controls alone until mobile NPCs are working again
+            _playerStats.SetPlayerTarget(gameObject, closest);
         }
     }
 }

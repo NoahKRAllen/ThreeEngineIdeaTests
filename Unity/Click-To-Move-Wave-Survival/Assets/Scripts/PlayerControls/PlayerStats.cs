@@ -1,4 +1,5 @@
 using Interfaces;
+using SharedScripts;
 using UnityEngine;
 
 namespace PlayerControls
@@ -16,15 +17,16 @@ namespace PlayerControls
 
         [SerializeField] int playerDamage;
 
-
         [SerializeField] int playerHealth;
 
 
         [SerializeField] private PlayerMovementController playerMovementController;
+        private bool _activeTargeting;
 
-        [SerializeField] private PlayerAttackController playerAttackController;
+        [SerializeField] private CombatController playerCombatController;
 
-
+        [SerializeField] private Transform target;
+        
         private bool ValidateRequest(GameObject requester)
         {
             //This will be used to handle the multiplayer logic in the future to ensure whatever is accessing code has permission to do so
@@ -59,9 +61,6 @@ namespace PlayerControls
             }
         }
 
-        public PlayerMovementController GetPlayerMovementController(GameObject requester) =>
-            ValidateRequest(requester) ? playerMovementController : null;
-
         public int GetPlayerHealth(GameObject requester) =>
             ValidateRequest(requester) ? playerHealth : 0;
 
@@ -79,8 +78,27 @@ namespace PlayerControls
                 playerHealth += value;
             }
         }
+        
+        public PlayerMovementController GetPlayerMovementController(GameObject requester) =>
+            ValidateRequest(requester) ? playerMovementController : null;
 
-        public PlayerAttackController GetPlayerAttackController(GameObject requester) =>
-            ValidateRequest(requester) ? playerAttackController : null;
+        public bool GetActiveTargeting(GameObject requester) => ValidateRequest(requester) && _activeTargeting;
+
+        public void SetActiveTargeting(GameObject requester, bool value)
+        {
+            _activeTargeting = value;
+        }
+
+        public CombatController GetPlayerCombatController(GameObject requester) =>
+            ValidateRequest(requester) ? playerCombatController : null;
+        
+        public Transform GetPlayerTarget(GameObject requester) =>
+            ValidateRequest(requester) ? target : null;
+
+        public void SetPlayerTarget(GameObject requester, Transform newTarget)
+        {
+            if (requester != null)
+                target = newTarget;
+        }
     }
 }

@@ -14,11 +14,13 @@ namespace SharedScripts
         private bool _isDead = false;
 
         private bool _withinRange = false;
-        private UnitStats _unitStats;
-        private PlayerStats _playerStats;
+        
+        //Set these two to serialized fields so that they can be inspected, not changed in editor
+        [SerializeField] UnitStats _unitStats;
+        [SerializeField] PlayerStats _playerStats;
         private float _nextAttackTime;
 
-        [SerializeField] private CombatController target;
+        [SerializeField] private CombatController targetCombatController;
 
         private enum UnitType { Player, Npc, NotSetup }
 
@@ -79,8 +81,8 @@ namespace SharedScripts
 
             if (!(_nextAttackTime <= 0.0f) || !_withinRange) return;
             _nextAttackTime = 1f / _playerStats.GetPlayerAttackRate(gameObject);
-            if (!target) return;
-            target.TakeDamage(gameObject, _playerStats.GetPlayerDamage(gameObject));
+            if (!targetCombatController) return;
+            targetCombatController.TakeDamage(gameObject, _playerStats.GetPlayerDamage(gameObject));
         }
 
         private void NpcUpdate()
@@ -97,8 +99,8 @@ namespace SharedScripts
 
             if (!(_nextAttackTime <= 0.0f) || !_withinRange) return;
             _nextAttackTime = 1f / _unitStats.GetUnitAttackSpeed(gameObject);
-            if (!target) return;
-            target.TakeDamage(gameObject, _unitStats.GetUnitDamage(gameObject));
+            if (!targetCombatController) return;
+            targetCombatController.TakeDamage(gameObject, _unitStats.GetUnitDamage(gameObject));
         }
 
         private void TakeDamage(GameObject requester, int incomingDamage)
@@ -152,7 +154,7 @@ namespace SharedScripts
             }
 
             _withinRange = true;
-            target = targetController;
+            targetCombatController = targetController;
         }
         
         public void StopAttack(GameObject requester)
@@ -162,7 +164,7 @@ namespace SharedScripts
                 return;
             }
             _withinRange = false;
-            target = null;
+            targetCombatController = null;
         }
     }
 }
