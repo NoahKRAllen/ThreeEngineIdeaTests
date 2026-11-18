@@ -5,30 +5,40 @@ namespace NPCControls
 {
     public class UnitMovementController : MonoBehaviour
     {
-        [SerializeField] private UnitStats unitStats;
+        private UnitStats _unitStats;
         private NavMeshAgent _agent;
-    
-        //Only serialized to be seen in editor, not manually modified
-        [SerializeField] private Transform _target;
+        private bool _inRange;
         void Start()
         {
+            _inRange = false;
+            _unitStats = GetComponent<UnitStats>();
             _agent = GetComponent<NavMeshAgent>();
-            _agent.speed = unitStats.GetUnitMovementSpeed(gameObject);
+            _agent.speed = _unitStats.GetUnitMovementSpeed(gameObject);
         }
 
         void Update()
         {
             //Setup checks for reaching attack range, if range is reached then stop movement and start attacking
-            //Can use enum like in ShapedLanes { Moving, Attacking }
             //Once in range, call over to UnitAttackController and set the attack bool to true to begin attacking
-            if(_target)
-                _agent.SetDestination(_target.position);
-        }
-        public void SetTarget(Transform closest)
-        {
-            //For the current build, as of 11/10/26, this function isn't in use. However, once there is more than a
-            //single player or more than a single player-based unit, this will come in handy.
-            _target = closest;
+            
+            if(_unitStats.GetUnitTarget(gameObject) && !_inRange)
+                _agent.SetDestination(_unitStats.GetUnitTarget(gameObject).position);
+            //Currently the only _agent.destination that the NPC units will have is the player character(s) and as such
+            //instead of having a stopping distance of 0.5f like the player, _unitStats.AttackRange is used as the stopping point
+            //The act of starting the attack is done inside the UnitTargetingController as it is the automatic targeting 
+            //system that will handle it
+            if (_unitStats.GetUnitTarget(gameObject) && 
+                Vector3.Distance(transform.position, _agent.destination) <= _unitStats.GetUnitAttackRange(gameObject) / 2f)
+            {
+                print($"{gameObject.name} has destination set of {_agent.destination}");
+                _inRange = true;
+                _agent.ResetPath();
+            }
+            else
+            {
+                _inRange = false;
+            }
+            
         }
         
         
@@ -38,11 +48,11 @@ namespace NPCControls
         
         private void OnDrawGizmosSelected()
         {
-            if (!unitStats) return;
+            if (!_unitStats) return;
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, unitStats.GetUnitAggroRange(gameObject));
+            Gizmos.DrawWireSphere(transform.position, _unitStats.GetUnitAggroRange(gameObject));
             Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, unitStats.GetUnitAttackRange(gameObject));
+            Gizmos.DrawWireSphere(transform.position, _unitStats.GetUnitAttackRange(gameObject));
         }
     }
 }

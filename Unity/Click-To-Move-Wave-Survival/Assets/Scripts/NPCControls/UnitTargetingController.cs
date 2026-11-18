@@ -7,9 +7,6 @@ namespace NPCControls
         private float _scanTimer;
         [Tooltip("How often (seconds) to re-scan for targets. Lower = more responsive, more expensive.")]
         [SerializeField] float targetScanInterval;
-    
-        [SerializeField] private Transform target;
-    
         [Tooltip("Only colliders on these layers count as valid targets.")]
         [SerializeField] private LayerMask enemyLayerMask;
     
@@ -41,8 +38,16 @@ namespace NPCControls
             //This may be changed now, with a buffer distance to stop swapping
             //So if Player1 is 10 away and Player2 is 10.1 away, we would stay focused on Player1 until Player2 was ~8 away
             //This should keep the 'flicker' down, and the buffer limit can be adjusted as needed.
-            if (target && Vector3.Distance(transform.position, target.position) <= _unitStats.GetUnitAggroRange(gameObject))
+            var targetPointer = _unitStats.GetUnitTarget(gameObject);
+            if (targetPointer && Vector3.Distance(transform.position, targetPointer.position) <= _unitStats.GetUnitAggroRange(gameObject))
+            {
+                if (Vector3.Distance(transform.position, targetPointer.position) <=
+                    _unitStats.GetUnitAttackRange(gameObject) / 2f)
+                {
+                    _unitStats.GetUnitCombatController(gameObject).StartAttack(gameObject, targetPointer);
+                }
                 return;
+            }
 
             //This was technically made as the result of needing to target a singular close target among many other potential targets.
             //This isn't useful for the Unit script currently with only the one player character being the potential target, as well as
@@ -64,19 +69,18 @@ namespace NPCControls
                 }
             }
 
-            target = closest;
+            _unitStats.SetUnitTarget(gameObject, closest);
             if (_unitStats.GetIsMobile(gameObject))
             {
-                if (!target)
+                if (!_unitStats.GetUnitTarget(gameObject))
                 {
                     //Setup some sort of patrol path or something?
-                    //Currently, all NPCs will be moving towards closest player at all times
+                    //Currently, all NPCs will be moving towards closest player, otherwise doing nothing
                     //Only will need to change this if we want non-hostile NPCs or maybe NPCs staying in a certain zone
                     return;
                 }
                 //Currently un-necessary as all enemy units will already have their target set to the player character
                 //Leaving in for use at a later time
-                _unitStats.GetUnitMovementController(gameObject).SetTarget(target);
                 return;
             }
             

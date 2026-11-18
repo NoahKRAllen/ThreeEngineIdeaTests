@@ -30,12 +30,7 @@ namespace PlayerControls
         private bool ValidateRequest(GameObject requester)
         {
             //This will be used to handle the multiplayer logic in the future to ensure whatever is accessing code has permission to do so
-            if (requester)
-            {
-                return true;
-            }
-
-            return false;
+            return requester;
         }
 
         public float GetPlayerMovementSpeed(GameObject requester) =>
@@ -55,7 +50,7 @@ namespace PlayerControls
 
         public void SetPlayerDamage(GameObject requester, int value)
         {
-            if (requester != null)
+            if (requester)
             {
                 playerDamage = value;
             }
@@ -66,14 +61,14 @@ namespace PlayerControls
 
         public void ReducePlayerHealth(GameObject requester, int value)
         {
-            if (requester != null)
+            if (requester)
             {
                 playerHealth = Mathf.Max(0, playerHealth - value);
             }
         }
         public void IncreasePlayerHealth(GameObject requester, int value)
         {
-            if (requester != null)
+            if (requester)
             {
                 playerHealth += value;
             }
@@ -97,7 +92,7 @@ namespace PlayerControls
 
         public void SetPlayerTarget(GameObject requester, Transform newTarget)
         {
-            if (requester != null)
+            if (requester)
                 target = newTarget;
         }
     }

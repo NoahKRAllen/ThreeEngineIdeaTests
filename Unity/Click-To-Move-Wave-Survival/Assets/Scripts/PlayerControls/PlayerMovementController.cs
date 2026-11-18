@@ -57,7 +57,7 @@ namespace PlayerControls
             if (playerStats.GetActiveTargeting(gameObject))
             {
                 if (Vector3.Distance(transform.position, playerStats.GetPlayerTarget(gameObject).position) <=
-                    playerStats.GetPlayerAttackRange(gameObject))
+                    playerStats.GetPlayerAttackRange(gameObject) / 2f)
                 {
                     _agent.ResetPath();
                     playerStats.GetPlayerCombatController(gameObject)

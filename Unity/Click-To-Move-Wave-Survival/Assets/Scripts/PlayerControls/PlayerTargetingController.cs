@@ -57,10 +57,10 @@ namespace PlayerControls
             // Keep the current target as long as it's alive and still in aggro range, rather than
             // re-picking "closest" every scan - avoids flickering between two nearby enemies.
             //Checking for target also will handle swapping targets when one had died, removing the need for that in CombatController
-            Transform targetPointer = _playerStats.GetPlayerTarget(gameObject);
+            var targetPointer = _playerStats.GetPlayerTarget(gameObject);
             if (targetPointer && Vector3.Distance(transform.position, targetPointer.position) <= _playerStats.GetPlayerAggroRange(gameObject))
             {
-                if (Vector3.Distance(transform.position,targetPointer.position) <= _playerStats.GetPlayerAttackRange(gameObject))
+                if (Vector3.Distance(transform.position,targetPointer.position) <= _playerStats.GetPlayerAttackRange(gameObject) / 2f)
                 {
                     _playerStats.GetPlayerCombatController(gameObject).StartAttack(gameObject, targetPointer);
                 }

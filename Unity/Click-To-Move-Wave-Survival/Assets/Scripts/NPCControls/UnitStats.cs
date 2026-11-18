@@ -1,3 +1,4 @@
+using SharedScripts;
 using UnityEngine;
 
 namespace NPCControls
@@ -12,17 +13,15 @@ namespace NPCControls
         [SerializeField] private float unitAggroRange;
         [SerializeField] private float unitMovementSpeed;
         [SerializeField] private bool isMobile;
+        [SerializeField] private Transform target;
         [SerializeField] private UnitMovementController unitMovementController;
         [SerializeField] private UnitTargetingController unitTargetingController;
+        [SerializeField] private CombatController unitCombatController;
         
         private bool ValidateRequest(GameObject requester)
         {
             //This will be used to handle the multiplayer logic in the future to ensure whatever is accessing code has permission to do so
-            if (requester)
-            {
-                return true;
-            }
-            return false;
+            return requester;
         }
         public string GetUnitName(GameObject requester) =>
             ValidateRequest(requester) ? unitName : null;
@@ -37,7 +36,7 @@ namespace NPCControls
         }
         public void IncreaseUnitHealth(GameObject requester, int value)
         {
-            if (requester != null)
+            if (ValidateRequest(requester))
             {
                 unitHealth += value;
             }
@@ -58,9 +57,23 @@ namespace NPCControls
         public bool GetIsMobile(GameObject requester) =>
             ValidateRequest(requester) && isMobile;
 
+        public Transform GetUnitTarget(GameObject requester) => ValidateRequest(requester) ? target : null;
+
+        public void SetUnitTarget(GameObject requester, Transform newTarget)
+        {
+            if (ValidateRequest(requester))
+            {
+                target = newTarget;
+            }
+        }
+
+
         public UnitMovementController GetUnitMovementController(GameObject requester) =>
             ValidateRequest(requester) ? unitMovementController : null;
         public UnitTargetingController GetUnitTargetingController(GameObject requester) =>
             ValidateRequest(requester) ? unitTargetingController : null;
+        
+        public CombatController GetUnitCombatController(GameObject requester) =>
+            ValidateRequest(requester) ? unitCombatController : null;
     }
 }
