@@ -30,7 +30,6 @@ namespace NPCControls
             if (_unitStats.GetUnitTarget(gameObject) && 
                 Vector3.Distance(transform.position, _agent.destination) <= _unitStats.GetUnitAttackRange(gameObject) / 2f)
             {
-                print($"{gameObject.name} has destination set of {_agent.destination}");
                 _inRange = true;
                 _agent.ResetPath();
             }

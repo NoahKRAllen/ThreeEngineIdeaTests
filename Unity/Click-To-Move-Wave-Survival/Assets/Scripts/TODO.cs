@@ -1,11 +1,6 @@
 /*
  * TODO List:
  * Code:
- * Player Attacking
- * Enemy Attacking
- * Player Death
- * Enemy Death
- * Enemy Spawning
  * Wave System
  * Victory Condition
  * Loss Condition
