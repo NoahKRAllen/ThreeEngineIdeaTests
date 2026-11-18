@@ -47,7 +47,7 @@ namespace NPCControls
             //This was technically made as the result of needing to target a singular close target among many other potential targets.
             //This isn't useful for the Unit script currently with only the one player character being the potential target, as well as
             //currently the units are all just set to move towards the player at all times.
-            //Will be leaving this here for use at a later time, as it will only cause a single loop which handles the targeting that we need anyways.
+            //Will be leaving this here for use at a later time, as it will only cause a single loop which handles the targeting that we need any ways.
             int count = Physics.OverlapSphereNonAlloc(transform.position, _unitStats.GetUnitAggroRange(gameObject), ScanBuffer, enemyLayerMask);
 
             Transform closest = null;

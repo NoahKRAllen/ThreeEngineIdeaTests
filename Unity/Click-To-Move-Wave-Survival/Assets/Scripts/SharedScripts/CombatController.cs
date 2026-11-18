@@ -147,14 +147,14 @@ namespace SharedScripts
                 return;
             }
 
-            if (!Registry.TryGetValue(newTarget, out var targetController))
+            if (!Registry.TryGetValue(newTarget, out var combatController))
             {
                 print($"No CombatController registered for {newTarget.name}");
                 return;
             }
 
             _withinRange = true;
-            targetCombatController = targetController;
+            targetCombatController = combatController;
         }
         
         public void StopAttack(GameObject requester)

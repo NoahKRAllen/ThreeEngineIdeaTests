@@ -33,13 +33,12 @@ namespace PlayerControls
             //Player Stop command input
             _scanTimer -= Time.deltaTime;
             //AutoTargeting will be stopped during player active targeting, set by player right-clicking on an enemy unit
-            if (_playerStats.GetActiveTargeting(gameObject))
+            if (!_playerStats.GetActiveTargeting(gameObject))
             {
-                return;
+                if (!(_scanTimer <= 0f)) return;
+                _scanTimer = targetScanInterval;
+                ScanForTarget();
             }
-            if (!(_scanTimer <= 0f)) return;
-            _scanTimer = targetScanInterval;
-            ScanForTarget();
         }
 
         void LateUpdate()
@@ -55,15 +54,18 @@ namespace PlayerControls
     
         private void ScanForTarget()
         {
-            // Keep the current target as long as it's alive and still in range, rather than
+            // Keep the current target as long as it's alive and still in aggro range, rather than
             // re-picking "closest" every scan - avoids flickering between two nearby enemies.
-            //This may be changed now, with a buffer distance to stop swapping
-            //So if Player1 is 10 away and Player2 is 10.1 away, we would stay focused on Player1 until Player2 was ~8 away
-            //This should keep the 'flicker' down, and the buffer limit can be adjusted as needed.
             //Checking for target also will handle swapping targets when one had died, removing the need for that in CombatController
-            if (_playerStats.GetPlayerTarget(gameObject) && Vector3.Distance(transform.position, _playerStats.GetPlayerTarget(gameObject).position) <= _playerStats.GetPlayerAggroRange(gameObject))
+            Transform targetPointer = _playerStats.GetPlayerTarget(gameObject);
+            if (targetPointer && Vector3.Distance(transform.position, targetPointer.position) <= _playerStats.GetPlayerAggroRange(gameObject))
+            {
+                if (Vector3.Distance(transform.position,targetPointer.position) <= _playerStats.GetPlayerAttackRange(gameObject))
+                {
+                    _playerStats.GetPlayerCombatController(gameObject).StartAttack(gameObject, targetPointer);
+                }
                 return;
-            
+            }
 
             int count = Physics.OverlapSphereNonAlloc(transform.position, _playerStats.GetPlayerAggroRange(gameObject), ScanBuffer, enemyLayerMask);
 
